@@ -1,9 +1,17 @@
+/* 
+	Add an email verification input for each email input contained in a form and included in a .form-group 
+	Author : Yves Gufflet - contact@yvesgufflet.fr
+	Date : 21/07/2025 
+*/
+
 $(function ()
 {
 	function uid ()
 	{
 		return Date.now().toString(36) + Math.random().toString(36).substr(2);
   	}
+
+	var vEmailsCount = 0;
 
 	$("input[type=email]")
 	.each (function ()
@@ -15,12 +23,15 @@ $(function ()
 		
 		var vForm =	vInput.parents ("form").eq(0);
 	
-		if (vForm.attr ("id") == "ajax-mail-form-handler")
-			return true;
+		var vParentGroup = vInput.parents (".form-group").eq(0);
+		
+		if (vParentGroup.length == 0) return true;
+
+		vEmailsCount++;
 
 		var vValidate =	vForm.find ("button[type=submit]");
-		var vControlGroup = vInput.parents (".control-group").eq(0);
-		var vControlGroupClone = vControlGroup.clone ().insertAfter (vControlGroup);
+
+		var vParentGroupClone = vParentGroup.clone ().insertAfter (vParentGroup);
 
 		var vID = vInput.attr ("id") + "_check_" + uid();
 		var vText = $('<div></div>');
@@ -39,20 +50,27 @@ $(function ()
 			{	    
 				if (vInput.val () != vInputClone.val ())
 				{
-					vText.html ('<span style="color : var(--danger-color) !important;">' + vDifferent + '</span>').css ("display", "block");
-					vValidate.attr ("disabled", "").attr ("title", vDifferent);
+					vText.html ('<span style="color : var(--danger-color) !important;">' + vDifferent + '</span>').css ("display", "block");					
 				}
 				else
 				{
-					vText.html ('<span style="color : var(--primary-color) !important;">' + vSame + '</span>').css ("display", "block");
-					vValidate.removeAttr ("disabled").attr ("title", "");
+					vText.html ('<span class="same_adress" style="color : var(--primary-color) !important;">' + vSame + '</span>').css ("display", "block");					
 				}			
+			}
+			
+			if ($(".same_adress").length == vEmailsCount)
+			{
+				vValidate.removeAttr ("disabled").attr ("title", "");				
+			}
+			else
+			{
+				vValidate.attr ("disabled", "").attr ("title", vDifferent);
 			}
 		};
 
 		vInput.on ("keyup change", verifyInputs);
 				
-		var vInputClone = vControlGroupClone
+		var vInputClone = vParentGroupClone
 		.find ("input[type=email]")
 		.addClass ("yw-email-verification")
 		.attr (
@@ -64,11 +82,11 @@ $(function ()
 		})
 		.on ("keyup change", verifyInputs);
 
-		vControlGroupClone
-		.find (".controls")
+		vParentGroupClone
+		//.find (".controls")
 		.append (vText);
 
-		vControlGroupClone
+		vParentGroupClone
 		.find ("label")
 		.before (vLabel)		
 		.remove ();
