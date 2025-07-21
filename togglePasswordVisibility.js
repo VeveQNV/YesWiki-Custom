@@ -1,3 +1,13 @@
+/* 
+	Add an eye button on the right of password inputs to toggle password visibility
+	
+	Use : copy this file in custom/javascripts
+	
+	Author : Yves Gufflet - contact@yvesgufflet.fr
+	
+	Date : 21/07/2025 
+*/
+
 $(function ()
 {
 	$("input[type=password]")
@@ -5,16 +15,22 @@ $(function ()
 	{
 		var vMe = $(this);
 
+		var vZIndex = vMe.css ("zIndex");
+		
+		if (isNaN (vZIndex)) vZIndex = "auto";
+		else vZIndex++;
+		
 		$("<div>")
 		.addClass ("far fa-eye")
 		.attr("title", "Afficher le mot de passe")
 		.css (
 		{
+			zIndex : vZIndex,
 			position: "absolute",
-			left: "100%",
+			right: "0%",
 			top: "50%",
 			transform: "translate(0px, -50%)",
-			paddingLeft: "0.5em",
+			paddingRight: "1em",
 			fontSize: "1em"
 		})
 		.on ("click", function ()
