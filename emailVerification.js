@@ -7,13 +7,18 @@ $(function ()
 
 	$("input[type=email]")
 	.each (function ()
-	{
-		var vDifferent = '<span style="color : var(--danger-color) !important;">Les adresses emails sont différentes</span>';
-		var vSame = '<span style="color : var(--primary-color) !important;">Les adresses emails sont identiques</span>';
+	{		
+		var vDifferent = 'Les adresses emails sont différentes';
+		var vSame = 'Les adresses emails sont identiques';
 
 		var vInput = $(this);
+		
+		var vForm =	vInput.parents ("form").eq(0);
+	
+		if (vForm.attr ("id") == "ajax-mail-form-handler")
+			return true;
 
-		var vValidate =	vInput.parents ("form").eq(0).find ("button[type=submit]");
+		var vValidate =	vForm.find ("button[type=submit]");
 		var vControlGroup = vInput.parents (".control-group").eq(0);
 		var vControlGroupClone = vControlGroup.clone ().insertAfter (vControlGroup);
 
@@ -34,12 +39,12 @@ $(function ()
 			{	    
 				if (vInput.val () != vInputClone.val ())
 				{
-					vText.html (vDifferent).css ("display", "block");
+					vText.html ('<span style="color : var(--danger-color) !important;">' + vDifferent + '</span>').css ("display", "block");
 					vValidate.attr ("disabled", "").attr ("title", vDifferent);
 				}
 				else
 				{
-					vText.html (vSame).css ("display", "block");
+					vText.html ('<span style="color : var(--primary-color) !important;">' + vSame + '</span>').css ("display", "block");
 					vValidate.removeAttr ("disabled").attr ("title", "");
 				}			
 			}
