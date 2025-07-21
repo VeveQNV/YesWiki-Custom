@@ -1,6 +1,10 @@
 /* 
 	Add an email verification input for each email input contained in a form and included in a .form-group 
+	
+	Use : copy this file in custom/javascripts
+	
 	Author : Yves Gufflet - contact@yvesgufflet.fr
+	
 	Date : 21/07/2025 
 */
 
